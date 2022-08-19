@@ -15,7 +15,7 @@ interface MemeResponse {
 export default class MemeScraper {
     apiURL = 'https://meme-api.herokuapp.com/gimme';
     private isMemeResponse(response: any): response is MemeResponse {
-        return response.postlink !== undefined && response.subreddit !== undefined && response.title !== undefined && response.url !== undefined && response.nsfw !== undefined && response.spoiler !== undefined && response.author !== undefined && response.ups !== undefined && response.preview !== undefined;
+        return response.url !== undefined ;
     }
     async run(): Promise<string> {
         const response = await fetch(this.apiURL);
