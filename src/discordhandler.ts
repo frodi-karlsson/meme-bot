@@ -1,9 +1,9 @@
-import { Client, Message, MessageType } from 'discord.js';
+import { Client } from 'discord.js';
 import MemeScraper from './memescraper';
 
 export default class DiscordHandler {
     client = new Client({
-        intents: ["Guilds", "GuildMessages", "GuildMessageReactions", "GuildMessageTyping"],
+        intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_MESSAGE_TYPING'],
     });
     memescraper = new MemeScraper(); // Create a new MemeScraper instance that scrapes memes
     ratingMap = new Map();
@@ -22,11 +22,11 @@ export default class DiscordHandler {
             } else {
                 console.log('No user found');
             }
-        }).on('messageCreate', async (message: Message) => { // on !meme command send a meme
+        }).on('messageCreate', async (message) => { // on !meme command send a meme
             if(message.channel.id !== "1010075098176307282") return; // only send memes in #memes
             const words = message.content.split(' ');
             let meme = "";
-            if(message.type === MessageType.Reply) {
+            if(message.type === 'REPLY') {
                 const repliedID = await message.reference?.messageId;
                 if(repliedID) {
                     const repliedMessage = await message.channel.messages.fetch(repliedID);

@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import axios from 'axios';
 
 interface MemeResponse {
     postlink: string;
@@ -18,8 +18,8 @@ export default class MemeScraper {
         return response.url !== undefined ;
     }
     async run(): Promise<string> {
-        const response = await fetch(this.apiURL);
-        const json = await response.json();
+        const response = await axios.get(this.apiURL);
+        const json = await response.data;
         if(json && this.isMemeResponse(json)) {
             return json.url as string;
         } else {
