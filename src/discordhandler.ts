@@ -61,7 +61,7 @@ export default class DiscordHandler {
         if(message.attachments.size > 0) {
             meme = message.attachments.first()!.url + "\nDonated by " + author.username;
             message.delete();
-        } else if (words[1].slice(0, 4) === 'http') {
+        } else if (words.length > 1 && words[1].slice(0, 4) === 'http') {
             meme = words[1] + "\nDonated by " + author.username;
             message.delete();
         } else if (words[0].slice(0, 4) === 'http') {
