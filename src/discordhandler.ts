@@ -24,13 +24,13 @@ export default class DiscordHandler {
             }
         }).on('messageCreate', async (message) => { // on !meme command send a meme
             if(message.channel.id !== "1010075098176307282") return; // only send memes in #memes
-            const words = message.content.toLowerCase().split(' ');
+            const words = message.content.split(' ');
             let meme = "";
             if(message.type === 'REPLY') {
                 this.handleReply(message);
-            } else if(words[0] === '!meme') {
+            } else if(words[0].toLowerCase() === '!meme') {
                 this.sendMeme(message, words);
-            } else if(message.content === "!memehelp"){
+            } else if(message.content.toLowerCase() === "!memehelp"){
                 message.channel.send("!meme - sends a meme\n!memehelp - this help message\nReplying to a meme with +2 or -2 will rate it up or down\nReplying to a meme with cringe deletes it");
             }
             if(meme != "") message.channel.send(meme + "\nRating: " + (this.ratingMap.get(message.id) ?? "0"));
