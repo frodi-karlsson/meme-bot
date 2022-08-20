@@ -24,7 +24,7 @@ export default class DiscordHandler {
             }
         }).on('messageCreate', async (message) => { // on !meme command send a meme
             if(message.channel.id !== "1010075098176307282") return; // only send memes in #memes
-            const words = message.content.split(' ');
+            const words = message.content.toLowerCase().split(' ');
             let meme = "";
             if(message.type === 'REPLY') {
                 this.handleReply(message);
@@ -60,16 +60,14 @@ export default class DiscordHandler {
         let meme = "";
         if(message.attachments.size > 0) {
             meme = message.attachments.first()!.url + "\nDonated by " + author.username;
-            message.delete();
         } else if (words.length > 1 && words[1].slice(0, 4) === 'http') {
             meme = words[1] + "\nDonated by " + author.username;
-            message.delete();
         } else if (words[0].slice(0, 4) === 'http') {
             meme = words[0] + "\nDonated by " + author.username;
-            message.delete();
         } else {
-            meme = await this.memescraper.run();
+            meme = await this.memescraper.run() + "\nRequested by " + author.username;
         }
+        message.delete();
         if(meme != "") message.channel.send(meme + "\nRating: " + (this.ratingMap.get(message.id) ?? "0"));
     }
 }
