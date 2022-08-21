@@ -90,7 +90,7 @@ export default class DiscordHandler {
         const repliedID = message.reference?.messageId;
         if(repliedID) {
             const repliedMessage = await message.channel.messages.fetch(repliedID);
-            if(repliedMessage.author.id === message.author.id && message.content === "!meme") {
+            if(repliedMessage.author.id !== this.client.user?.id && message.content === "!meme") {
                 this.sendMeme(repliedMessage, repliedMessage.content.split(" "), true);
             }
         }
