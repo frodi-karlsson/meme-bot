@@ -60,6 +60,7 @@ export default class DiscordHandler {
     private async sendMeme(message: Message, words: string[]) {
         const author = message.author;
         let meme = "";
+        let toDelete = true;
         if(message.attachments.size > 0) {
             meme = message.attachments.first()!.url + "\nDonated by " + author.username;
         } else if (words.length > 1 && words[1].slice(0, 4) === 'http') {
@@ -67,9 +68,10 @@ export default class DiscordHandler {
         } else if (words[0].slice(0, 4) === 'http') {
             meme = words[0] + "\nDonated by " + author.username;
         } else {
+            toDelete = false;
             meme = await this.memescraper.run() + "\nRequested by " + author.username;
         }
-        message.delete();
+        if(toDelete) message.delete();
         if(meme != "") {
             const msg = await message.channel.send(meme + "\nRating: " + (this.ratingMap.get(message.id) ?? "0"));
             const letUrDreamsEmoji = '1010914891080683551';
