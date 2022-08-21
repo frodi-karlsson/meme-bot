@@ -36,8 +36,11 @@ export default class DiscordHandler {
             
             if(meme != "") {
                 const msg: Message = await message.channel.send(meme + "\nRating: " + (this.ratingMap.get(message.id) ?? "0"));
-                msg.react('leturmemesbedreams');
-                msg.react('chugjugmoment');
+                const letUrDreamsEmoji = this.client.emojis.cache.find(emoji => emoji.name === 'leturmemesbedreams');
+                const chugJugMomentEmoji = this.client.emojis.cache.find(emoji => emoji.name === 'chugjugmoment');
+                if(letUrDreamsEmoji) msg.react(letUrDreamsEmoji);
+                if(chugJugMomentEmoji) msg.react(chugJugMomentEmoji);
+
             } 
         }).on('messageReactionAdd', async (reaction, user) => {
             if(!reaction.partial && !user.partial) this.handleReaction(reaction, user);
