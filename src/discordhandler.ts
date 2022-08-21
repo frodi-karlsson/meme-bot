@@ -91,12 +91,12 @@ export default class DiscordHandler {
         if(repliedID) {
             const repliedMessage = await message.channel.messages.fetch(repliedID);
             if(repliedMessage.author.id === message.author.id && message.content === "!meme") {
-                this.sendMeme(repliedMessage, repliedMessage.content.split(" "));
+                this.sendMeme(repliedMessage, repliedMessage.content.split(" "), true);
             }
         }
     }
 
-    private async sendMeme(message: Message, words: string[]) {
+    private async sendMeme(message: Message, words: string[], reply?: boolean) {
         const author = message.author;
         let meme = "";
         let toDelete = true;
@@ -107,7 +107,7 @@ export default class DiscordHandler {
         } else if (words[0].slice(0, 4) === 'http') {
             meme = words[0] + "\nDonated by " + author.username;
         } else {
-            toDelete = false;
+            toDelete = !reply ?? true;
             meme = await this.memescraper.run() + "\nRequested by " + author.username;
         }
         if(toDelete) message.delete();
