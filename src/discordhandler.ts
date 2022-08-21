@@ -32,15 +32,12 @@ export default class DiscordHandler {
                 this.sendMeme(message, words);
             } else if(message.content.toLowerCase() === "!memehelp"){
                 message.channel.send("!meme - sends a meme\n!memehelp - this help message\nReplying to a meme with +2 or -2 will rate it up or down\nReplying to a meme with cringe deletes it");
-            } else if (message.content === "listemojis") {
-                const emojiList = message.guild!.emojis.cache.map((e, x) => `${x} = ${e} | ${e.name}`).join("\n");
-                message.channel.send(emojiList);
-             }
+            }
             
             if(meme != "") {
                 const msg: Message = await message.channel.send(meme + "\nRating: " + (this.ratingMap.get(message.id) ?? "0"));
-                const letUrDreamsEmoji = msg.guild!.emojis.cache.find(emoji => emoji.name === 'leturmemesbedreams');
-                const chugJugMomentEmoji = msg.guild!.emojis.cache.find(emoji => emoji.name === 'chugjugmoment');
+                const letUrDreamsEmoji = '1010914891080683551';
+                const chugJugMomentEmoji = '1010915040574062623';
                 if(letUrDreamsEmoji) msg.react(letUrDreamsEmoji);
                 if(chugJugMomentEmoji) msg.react(chugJugMomentEmoji);
 
