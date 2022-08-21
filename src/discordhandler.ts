@@ -42,7 +42,7 @@ export default class DiscordHandler {
         if(reaction.emoji.name === 'leturmemesbedreams' || reaction.emoji.name === 'chugjugmoment') {
             this.rate(reaction.message.id, reaction.emoji.name === 'chugjugmoment');
             reaction.message.edit(reaction.message.content?.split("\n").slice(0, -1).join("\n") + "\nRating: " + (this.ratingMap.get(reaction.message.id) ?? "0"));
-            reaction.remove();
+            reaction.users.remove(user);
         }
         
     }
