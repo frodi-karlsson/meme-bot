@@ -6,4 +6,7 @@ export default class DiscordHandler {
     ratingMap: Map<any, any>;
     rate(messageId: string, positive: boolean): void;
     constructor(token: string);
+    private handleReaction;
+    private handleReply;
+    private sendMeme;
 }

@@ -1,17 +1,56 @@
 import { Client, Message, MessageReaction, User } from 'discord.js';
 import MemeScraper from './memescraper';
 
+class MapStack {
+    private map: Map<string, number>;
+    private added: string[] = [];
+
+    constructor() {
+        this.map = new Map();
+    }
+
+    private removeFirst(): void {
+        this.map.delete(this.added[0]);
+        this.added.shift();
+    }
+
+    public edit(key: string, value: number): void {
+        if (this.map.has(key)) {
+            this.map.set(key, (this.map.get(key)! + value));
+        } else {
+            this.map.set(key, value);
+            this.added.push(key);
+            if (this.added.length > 10000) {
+                this.removeFirst();
+            }
+        }
+    }
+
+    public getOrElse(key: string, defaultValue: number): number {
+        if (this.map.has(key)) {
+            return this.map.get(key)!;
+        } else {
+            return defaultValue;
+        }
+    }
+
+    public get(key: string): number {
+        return this.map.get(key)!;
+    }
+
+}
+
 export default class DiscordHandler {
     client = new Client({
         intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_MESSAGE_TYPING'],
     });
     memescraper = new MemeScraper(); // Create a new MemeScraper instance that scrapes memes
-    ratingMap = new Map();
+    ratingMap = new MapStack();
     rate(messageId: string, positive: boolean){
         if(positive){
-            this.ratingMap.set(messageId, (this.ratingMap.get(messageId) ?? 0) + 2);
+            this.ratingMap.edit(messageId, 2);
         } else {
-            this.ratingMap.set(messageId, (this.ratingMap.get(messageId) ?? 0) - 2);
+            this.ratingMap.edit(messageId, -2);
         }
     }
     constructor(token: string) {
@@ -41,7 +80,7 @@ export default class DiscordHandler {
         if(reaction.message.channel.id !== "1010075098176307282" || user.id === this.client.user!.id || reaction.message.author !== this.client.user) return;
         if(reaction.emoji.name === 'leturmemesbedreams' || reaction.emoji.name === 'chugjugmoment') {
             this.rate(reaction.message.id, reaction.emoji.name === 'chugjugmoment');
-            reaction.message.edit(reaction.message.content?.split("\n").slice(0, -1).join("\n") + "\nRating: " + (this.ratingMap.get(reaction.message.id) ?? "0"));
+            reaction.message.edit(reaction.message.content?.split("\n").slice(0, -1).join("\n") + "\nRating: " + this.ratingMap.getOrElse(reaction.message.id, 0));
             reaction.users.remove(user);
         }
         
@@ -73,7 +112,7 @@ export default class DiscordHandler {
         }
         if(toDelete) message.delete();
         if(meme != "") {
-            const msg = await message.channel.send(meme + "\nRating: " + (this.ratingMap.get(message.id) ?? "0"));
+            const msg = await message.channel.send(meme + "\nRating: " + (this.ratingMap.getOrElse(message.id, 0)));
             const letUrDreamsEmoji = '1010914891080683551';
             const chugJugMomentEmoji = '1010915040574062623';
             msg.react(letUrDreamsEmoji);
