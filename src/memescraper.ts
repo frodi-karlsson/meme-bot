@@ -21,7 +21,7 @@ export default class MemeScraper {
         const response = await axios.get(this.apiURL);
         const json = await response.data;
         if(json && this.isMemeResponse(json)) {
-            return json.url as string;
+            return json.url as string + '\nTitle: ' + json.title + '\nSubreddit: ' + json.subreddit;
         } else {
             return "";
         }
