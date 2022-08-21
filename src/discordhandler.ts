@@ -25,7 +25,6 @@ export default class DiscordHandler {
         }).on('messageCreate', async (message) => { // on !meme command send a meme
             if(message.channel.id !== "1010075098176307282") return; // only send memes in #memes
             const words = message.content.split(' ');
-            let meme = "";
             if(message.type === 'REPLY') {
                 this.handleReply(message);
             } else if(words[0].toLowerCase() === '!meme') {
@@ -33,15 +32,6 @@ export default class DiscordHandler {
             } else if(message.content.toLowerCase() === "!memehelp"){
                 message.channel.send("!meme - sends a meme\n!memehelp - this help message\nReplying to a meme with +2 or -2 will rate it up or down\nReplying to a meme with cringe deletes it");
             }
-            
-            if(meme != "") {
-                const msg: Message = await message.channel.send(meme + "\nRating: " + (this.ratingMap.get(message.id) ?? "0"));
-                const letUrDreamsEmoji = '1010914891080683551';
-                const chugJugMomentEmoji = '1010915040574062623';
-                if(letUrDreamsEmoji) msg.react(letUrDreamsEmoji);
-                if(chugJugMomentEmoji) msg.react(chugJugMomentEmoji);
-
-            } 
         }).on('messageReactionAdd', async (reaction, user) => {
             if(!reaction.partial && !user.partial) this.handleReaction(reaction, user);
         });
@@ -80,6 +70,12 @@ export default class DiscordHandler {
             meme = await this.memescraper.run() + "\nRequested by " + author.username;
         }
         message.delete();
-        if(meme != "") message.channel.send(meme + "\nRating: " + (this.ratingMap.get(message.id) ?? "0"));
+        if(meme != "") {
+            const msg = await message.channel.send(meme + "\nRating: " + (this.ratingMap.get(message.id) ?? "0"));
+            const letUrDreamsEmoji = '1010914891080683551';
+            const chugJugMomentEmoji = '1010915040574062623';
+            msg.react(letUrDreamsEmoji);
+            msg.react(chugJugMomentEmoji);
+        }
     }
 }
