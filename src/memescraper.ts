@@ -22,6 +22,7 @@ export default class MemeScraper {
         "terriblefacebookmemes",
         "antimeme",
         "wholesomememes",
+        "jerma985",
     ]
     private getRandomSubreddit(): string {
         return this.subreddits[Math.floor(Math.random() * this.subreddits.length)];
