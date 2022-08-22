@@ -118,15 +118,12 @@ export default class DiscordHandler {
     private async sendMeme(message: Message, words: string[], reply?: boolean) {
         const author = message.author;
         let meme = "";
-        let toDelete = true;
         if(this.isDonation(message)){
             meme = await this.donateMeme(message);
-            toDelete = false;
         } else {
-            toDelete = !reply ?? true;
             meme = await this.memescraper.run() + "\nRequested by <@" + author.username + ">";
         }
-        if(toDelete) message.delete();
+        message.delete();
         if(meme != "") {
             const msg = await message.channel.send(meme + "\nRating: " + (this.ratingMap.getOrElse(message.id, 0)));
             const letUrDreamsEmoji = '1010914891080683551';
