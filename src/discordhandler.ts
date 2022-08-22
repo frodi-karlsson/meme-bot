@@ -112,7 +112,7 @@ export default class DiscordHandler {
         } else {
             meme = message.content.split(' ').filter(word => word.slice(0, 4) === 'http')[0];
         }
-        return meme + "\nDonated by @" + message.author.tag;
+        return meme + "\nDonated by <@" + message.author.id + ">";
     }
 
     private async sendMeme(message: Message, words: string[], reply?: boolean) {
@@ -124,7 +124,7 @@ export default class DiscordHandler {
             toDelete = false;
         } else {
             toDelete = !reply ?? true;
-            meme = await this.memescraper.run() + "\nRequested by " + author.username;
+            meme = await this.memescraper.run() + "\nRequested by <@" + author.username + ">";
         }
         if(toDelete) message.delete();
         if(meme != "") {
