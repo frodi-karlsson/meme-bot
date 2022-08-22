@@ -130,6 +130,10 @@ export default class DiscordHandler {
             const chugJugMomentEmoji = '1010915040574062623';
             msg.react(letUrDreamsEmoji);
             msg.react(chugJugMomentEmoji);
+            msg.startThread({
+                name: "Meme Discussion Thread",
+                autoArchiveDuration: 1440,
+            });
         }
     }
 }
