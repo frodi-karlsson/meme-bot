@@ -122,7 +122,12 @@ export default class DiscordHandler {
         if(this.isDonation(message)){
             meme = await this.donateMeme(message);
         } else {
-            meme = await this.memescraper.run(subreddit) + "\nRequested by <@" + author.id + ">";
+            const generated = await this.memescraper.run(subreddit)
+            if(generated){
+                meme = generated + "\nRequested by <@" + author.id + ">";
+            } else {
+                meme = ""
+            }
         }
         message.delete();
         if(meme != "") {
