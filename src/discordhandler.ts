@@ -118,10 +118,11 @@ export default class DiscordHandler {
     private async sendMeme(message: Message, words: string[], reply?: boolean) {
         const author = message.author;
         let meme = "";
+        const subreddit: string | undefined = words[1];
         if(this.isDonation(message)){
             meme = await this.donateMeme(message);
         } else {
-            meme = await this.memescraper.run() + "\nRequested by <@" + author.id + ">";
+            meme = await this.memescraper.run(subreddit) + "\nRequested by <@" + author.id + ">";
         }
         message.delete();
         if(meme != "") {

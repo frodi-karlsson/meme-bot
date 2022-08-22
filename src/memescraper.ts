@@ -30,11 +30,14 @@ export default class MemeScraper {
     private getRandomSubredditLink(): string {
         return this.apiURL + '/' + this.getRandomSubreddit();
     }
+    private getSubredditLink(subreddit: string): string {
+        return this.apiURL + '/' + subreddit;
+    }
     private isMemeResponse(response: any): response is MemeResponse {
         return response.url !== undefined && response.subreddit !== undefined && response.title !== undefined;
     }
-    async run(): Promise<string> {
-        const response = await axios.get(this.getRandomSubredditLink());
+    async run(subreddit?: string): Promise<string> {
+        const response = await axios.get(subreddit ? this.getSubredditLink(subreddit) : this.getRandomSubredditLink());
         const json = await response.data;
         if(json && this.isMemeResponse(json)) {
             return json.url + '\nTitle: ' + json.title + '\nSubreddit: ' + json.subreddit;
