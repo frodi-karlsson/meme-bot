@@ -66,7 +66,7 @@ export default class DiscordHandler {
             const words = message.content.split(' ');
             if(message.type === 'REPLY') {
                 this.handleReply(message);
-            } else if(words[0].toLowerCase() === '!meme') {
+            } else if(words[0].toLowerCase() === '!meme' || this.isDonation(message)) {
                 this.sendMeme(message, words);
             } else if(message.content.toLowerCase() === "!memehelp"){
                 message.channel.send("!meme - sends a meme\n!memehelp - this help message\nReplying to a meme with +2 or -2 will rate it up or down\nReplying to a meme with cringe deletes it");
@@ -100,16 +100,28 @@ export default class DiscordHandler {
         }
     }
 
+    private isDonation(message: Message): boolean {
+        const words = message.content.split(' ');
+        return words.filter(word => word.slice(0, 4) === 'http').length > 0 || message.attachments.size > 0;
+    }
+
+    private async donateMeme(message: Message){
+        let meme = "";
+        if(message.attachments.size > 0){
+            meme = message.attachments.first()!.url;
+        } else {
+            meme = message.content.split(' ').filter(word => word.slice(0, 4) === 'http')[0];
+        }
+        return meme + "\nDonated by" + message.author.tag;
+    }
+
     private async sendMeme(message: Message, words: string[], reply?: boolean) {
         const author = message.author;
         let meme = "";
         let toDelete = true;
-        if(message.attachments.size > 0) {
-            meme = message.attachments.first()!.url + "\nDonated by " + author.username;
-        } else if (words.length > 1 && words[1].slice(0, 4) === 'http') {
-            meme = words[1] + "\nDonated by " + author.username;
-        } else if (words[0].slice(0, 4) === 'http') {
-            meme = words[0] + "\nDonated by " + author.username;
+        if(this.isDonation(message)){
+            meme = await this.donateMeme(message);
+            toDelete = false;
         } else {
             toDelete = !reply ?? true;
             meme = await this.memescraper.run() + "\nRequested by " + author.username;
