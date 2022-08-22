@@ -70,6 +70,8 @@ export default class DiscordHandler {
                 this.sendMeme(message, words);
             } else if(message.content.toLowerCase() === "!memehelp"){
                 message.channel.send("!meme - sends a meme\n!memehelp - this help message\nReplying to a meme with +2 or -2 will rate it up or down\nReplying to a meme with cringe deletes it");
+            } else if(message.author !== this.client.user){
+                message.delete();
             }
         }).on('messageReactionAdd', async (reaction, user) => {
             if(!reaction.partial && !user.partial) this.handleReaction(reaction, user);
@@ -92,6 +94,8 @@ export default class DiscordHandler {
             const repliedMessage = await message.channel.messages.fetch(repliedID);
             if(repliedMessage.author.id !== this.client.user?.id && message.content === "!meme") {
                 this.sendMeme(repliedMessage, repliedMessage.content.split(" "), true);
+            } else {
+                message.delete();
             }
         }
     }
