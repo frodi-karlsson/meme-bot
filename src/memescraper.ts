@@ -16,10 +16,7 @@ export default class MemeScraper {
     apiURL = 'https://meme-api.herokuapp.com/gimme';
     subreddits = [
         "dankmemes",
-        "memeeconomy",
         "surrealmemes",
-        "deepfriedmemes",
-        "4chan",
         "okbuddyretard",
         "memes",
         "terriblefacebookmemes",
