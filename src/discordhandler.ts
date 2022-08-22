@@ -62,7 +62,7 @@ export default class DiscordHandler {
                 console.log('No user found');
             }
         }).on('messageCreate', async (message) => { // on !meme command send a meme
-            if(message.channel.id !== "1010075098176307282") return; // only send memes in #memes
+            if(message.channel.id !== "1010075098176307282" || message.author.id === this.client.user?.id) return; // only send memes in #memes
             const words = message.content.split(' ');
             if(message.type === 'REPLY') {
                 this.handleReply(message);
