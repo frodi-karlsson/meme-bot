@@ -112,7 +112,7 @@ export default class DiscordHandler {
         } else {
             meme = message.content.split(' ').filter(word => word.slice(0, 4) === 'http')[0];
         }
-        return meme + "\nDonated by" + message.author.tag;
+        return meme + "\nDonated by @" + message.author.tag;
     }
 
     private async sendMeme(message: Message, words: string[], reply?: boolean) {
