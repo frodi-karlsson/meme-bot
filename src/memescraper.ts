@@ -37,12 +37,16 @@ export default class MemeScraper {
         return response.url !== undefined && response.subreddit !== undefined && response.title !== undefined;
     }
     async run(subreddit?: string): Promise<string> {
-        const response = await axios.get(subreddit ? this.getSubredditLink(subreddit) : this.getRandomSubredditLink());
-        const json = await response.data;
-        if(json && this.isMemeResponse(json)) {
-            return json.url + '\nTitle: ' + json.title + '\nSubreddit: ' + json.subreddit;
-        } else {
-            return "";
+        try {
+            const response = await axios.get(subreddit ? this.getSubredditLink(subreddit) : this.getRandomSubredditLink());
+            const json = await response.data;
+            if(json && this.isMemeResponse(json)) {
+                return json.url + '\nTitle: ' + json.title + '\nSubreddit: ' + json.subreddit;
+            } else {
+                return '';
+            }
+        } catch(e) {
+            return '';
         }
     }
 }
