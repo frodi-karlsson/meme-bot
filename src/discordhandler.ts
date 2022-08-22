@@ -138,7 +138,7 @@ export default class DiscordHandler {
             msg.react(chugJugMomentEmoji);
             let name = "Meme discussion thread"
             if(meme.includes("Title:")){
-                name = meme.split("Title:")[1].split("\n")[0];
+                name = meme.split("Title:")[1].split("\n")[0].slice(0, 99);
             }
             msg.startThread({
                 name: name,
